@@ -47,6 +47,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: |
           cd natives
-          npm publish --provenance --access public
+          npm publish --ws --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
