@@ -1,0 +1,21 @@
+{
+  "name": "@lazy_engineer/tokenizers-huggingface-win32-arm64",
+  "version": "0.0.0-rc.1",
+  "license": "Apache-2.0",
+  "type": "module",
+  "description": "Precompiled dynamic library for HuggingFace tokenizers. This package includes only the native code and minimal JS bindings for the specified platform. For full functionality, see the main package or search on jsr.",
+  "author": {
+    "name": "Ignacio de la Torre Arias"
+  },
+  "homepage": "https://github.com/IgnaciodelaTorreArias/tokenizers_proto#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IgnaciodelaTorreArias/tokenizers_proto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/issues"
+  },
+  "os": [ "win32" ],
+  "cpu": [ "arm64" ],
+  "files": [ "index.js", "README.md", "tokenizers_proto.dll" ]
+}

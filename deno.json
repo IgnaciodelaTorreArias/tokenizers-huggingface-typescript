@@ -1,0 +1,19 @@
+{
+  "name": "@lazy-engineer/tokenizers-huggingface",
+  "version": "0.0.0-rc.1",
+  "description": "Deno & Bun bindings for Hugging face's Tokenizers",
+  "license": "Apache-2.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publish": {
+    "include": [
+      "src",
+      "deno.json",
+      "README.md"
+    ]
+  },
+  "imports": {
+    "@bufbuild/protobuf": "npm:@bufbuild/protobuf@^2.6.3"
+  }
+}
