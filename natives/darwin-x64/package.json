@@ -1,19 +1,19 @@
 {
   "name": "@lazy_engineer/tokenizers-huggingface-darwin-x64",
-  "version": "0.0.0-rc.1",
+  "version": "0.0.0-rc.2",
   "license": "Apache-2.0",
   "type": "module",
   "description": "Precompiled dynamic library for HuggingFace tokenizers. This package includes only the native code and minimal JS bindings for the specified platform. For full functionality, see the main package or search on jsr.",
   "author": {
     "name": "Ignacio de la Torre Arias"
   },
-  "homepage": "https://github.com/IgnaciodelaTorreArias/tokenizers_proto#readme",
+  "homepage": "https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IgnaciodelaTorreArias/tokenizers_proto.git"
+    "url": "git+https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript.git"
   },
   "bugs": {
-    "url": "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/issues"
+    "url": "https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript/issues"
   },
   "os": [ "darwin" ],
   "cpu": [ "x64" ],

@@ -1,6 +1,6 @@
 {
   "name": "@lazy-engineer/tokenizers-huggingface",
-  "version": "0.0.0-rc.1",
+  "version": "0.0.0-rc.2",
   "description": "Deno & Bun bindings for Hugging face's Tokenizers",
   "license": "Apache-2.0",
   "exports": {
