@@ -1,0 +1,28 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.version }}
+      - uses: denoland/setup-deno@v2
+        with:
+          cache: true
+      - name: build
+        run: |
+          mv deno.json deno-publish.json
+          mv package.json package-bun.json
+          mv package-build.json package.json
+          deno install
+          deno task generate
+          mv package.json package-build.json
+          mv deno-publish.json deno.json
+      - name: publish
+        run: deno publish

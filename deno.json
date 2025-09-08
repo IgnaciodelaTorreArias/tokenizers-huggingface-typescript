@@ -1,6 +1,6 @@
 {
   "name": "@lazy-engineer/tokenizers-huggingface",
-  "version": "0.0.0-rc.2",
+  "version": "0.21.4-rc.1",
   "description": "Deno & Bun bindings for Hugging face's Tokenizers",
   "license": "Apache-2.0",
   "exports": {
@@ -8,12 +8,27 @@
   },
   "publish": {
     "include": [
-      "src",
+      "src/",
+      "src/generated/",
       "deno.json",
       "README.md"
     ]
   },
   "imports": {
-    "@bufbuild/protobuf": "npm:@bufbuild/protobuf@^2.6.3"
+    "@bufbuild/protobuf": "npm:@bufbuild/protobuf@^2.6.3",
+    "@lazy_engineer/tokenizers-huggingface-darwin-arm64": "npm:@lazy_engineer/tokenizers-huggingface-darwin-arm64@^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-darwin-x64": "npm:@lazy_engineer/tokenizers-huggingface-darwin-x64@^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-linux-arm64": "npm:@lazy_engineer/tokenizers-huggingface-linux-arm64@^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-linux-x64": "npm:@lazy_engineer/tokenizers-huggingface-linux-x64@^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-win32-arm64": "npm:@lazy_engineer/tokenizers-huggingface-win32-arm64@^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-win32-x64": "npm:@lazy_engineer/tokenizers-huggingface-win32-x64@^1.21.4"
+  },
+  "fmt": {
+    "include": ["src/", "natives/"],
+    "exclude": ["natives/*/README.md"],
+    "indentWidth": 4,
+    "trailingCommas": "onlyMultiLine",
+    "useBraces": "whenNotSingleLine",
+    "newLineKind": "lf"
   }
 }

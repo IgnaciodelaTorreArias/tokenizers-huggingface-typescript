@@ -10,6 +10,9 @@ on:
 jobs:
   pack:
     runs-on: ubuntu-latest
+    env:
+      NATIVES: "linux-arm64 linux-x64 darwin-arm64 darwin-x64 win32-arm64 win32-x64"
+      RUST_RUNTIMES: "aarch64-linux-gnu x86_64-linux-gnu aarch64-darwin x86_64-darwin aarch64-windows x86_64-windows"
     permissions:
       contents: read
       id-token: write
@@ -18,36 +21,21 @@ jobs:
         with:
           ref: v${{ inputs.version }}
       # Start downloads
-      - run: sudo apt install -y unzip
-      - name: linux-arm64
-        run : |
-          curl -LO "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/releases/download/v${{ inputs.tokenizers_proto_version }}/linux-arm64.zip"
-          unzip "linux-arm64.zip" -d natives/linux-arm64
-      - name: linux-x64
-        run : |
-          curl -LO "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/releases/download/v${{ inputs.tokenizers_proto_version }}/linux-x64.zip"
-          unzip "linux-x64.zip" -d natives/linux-x64
-      - name: darwin-arm64
-        run : |
-          curl -LO "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/releases/download/v${{ inputs.tokenizers_proto_version }}/darwin-arm64.zip"
-          unzip "darwin-arm64.zip" -d natives/darwin-arm64
-      - name: darwin-x64
-        run : |
-          curl -LO "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/releases/download/v${{ inputs.tokenizers_proto_version }}/darwin-x64.zip"
-          unzip "darwin-x64.zip" -d natives/darwin-x64
-      - name: win32-arm64
-        run : |
-          curl -LO "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/releases/download/v${{ inputs.tokenizers_proto_version }}/windows-arm64.zip"
-          unzip "windows-arm64.zip" -d natives/win32-arm64
-      - name: win32-x64
-        run : |
-          curl -LO "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/releases/download/v${{ inputs.tokenizers_proto_version }}/windows-x64.zip"
-          unzip "windows-x64.zip" -d natives/win32-x64
+      - name: download libraries
+        run: |
+          read -a natives <<< "${{ env.NATIVES }}"
+          read -a rust_runtimes <<< "${{ env.RUST_RUNTIMES }}"
+          for ((i=0;i<${#natives[@]};i++))
+          do
+            mkdir -p ./natives/${natives[i]}
+            curl -L "https://github.com/IgnaciodelaTorreArias/tokenizers_proto/releases/download/v${{ inputs.tokenizers_proto_version }}/${rust_runtimes[i]}.tar.gz" |
+            tar -xzf - -C ./natives/${net_runtimes[i]}
+          done
       # Finish downloads
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "22.x"
+          registry-url: "https://registry.npmjs.org"
       - run: |
           cd natives
           npm publish --ws --provenance --access public

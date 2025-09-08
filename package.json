@@ -1,0 +1,27 @@
+{
+  "name": "@lazy-engineer/tokenizers-huggingface",
+  "version": "0.21.4-rc.1",
+  "description": "Deno & Bun bindings for Hugging face's Tokenizers",
+  "license": "Apache-2.0",
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.6.3"
+  },
+  "optionalDependencies": {
+    "@lazy_engineer/tokenizers-huggingface-darwin-arm64": "^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-darwin-x64": "^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-linux-arm64": "^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-linux-x64": "^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-win32-arm64": "^1.21.4",
+    "@lazy_engineer/tokenizers-huggingface-win32-x64": "^1.21.4"
+  }
+}
