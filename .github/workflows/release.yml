@@ -4,6 +4,8 @@ on:
     inputs:
       version:
         required: true
+env:
+  PROTOC_VERSION: "32.0"
 
 jobs:
   publish:
@@ -15,6 +17,17 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           cache: true
+      - name: install packages
+        run: |
+          sudo apt update
+          sudo apt install unzip
+      - name: install protoc
+        run: |
+          PROTOC_ZIP="protoc-${{ env.PROTOC_VERSION }}-linux-x86_64.zip"
+          curl -LO "https://github.com/protocolbuffers/protobuf/releases/download/v${{ env.PROTOC_VERSION }}/$PROTOC_ZIP"
+          unzip $PROTOC_ZIP -d $HOME/.protoc
+      - name: update path
+        run: echo "$HOME/.protoc/bin" >> $GITHUB_PATH
       - name: build
         run: |
           mv deno.json deno-publish.json
