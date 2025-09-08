@@ -35,6 +35,7 @@ jobs:
           mv package.json package-bun.json
           mv package-build.json package.json
           deno install
+          sudo chmod 755 protoc-gen-ts_proto.sh
           deno task generate
           mv package.json package-build.json
           mv deno-publish.json deno.json
