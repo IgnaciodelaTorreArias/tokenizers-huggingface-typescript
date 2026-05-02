@@ -1,9 +1,9 @@
 {
     "name": "@lazy_engineer/tokenizers-huggingface-win32-arm64",
-    "version": "1.21.4",
+    "version": "1.21.4-rc.1",
     "license": "Apache-2.0",
     "type": "module",
-    "description": "Precompiled dynamic library for HuggingFace tokenizers. This package includes only the native code and minimal JS bindings for the specified platform. For full functionality, see the main package or search on jsr.",
+    "description": "Precompiled dynamic library for HuggingFace tokenizers. This package includes only the native code. For full functionality, see https://jsr.io/@lazy-engineer/tokenizers-huggingface",
     "author": {
         "name": "Ignacio de la Torre Arias"
     },
