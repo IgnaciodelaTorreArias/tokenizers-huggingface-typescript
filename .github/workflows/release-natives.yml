@@ -36,5 +36,3 @@ jobs:
       - run: |
           cd natives
           npm publish --ws --provenance --access public --tag rc
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
