@@ -33,14 +33,14 @@ export abstract class PreTokenizer extends ForeignInstance {
     constructor(param: PreTokenizerWrapper) {
         super();
         this.instancePtr = createNewArgs(
-            dylib.new_pre_tokenizer_wrapper,
+            dylib.lib_tokenizers_new_pre_tokenizer_wrapper,
             param,
             PreTokenizerWrapper,
         );
     }
     /**
      * Splits the given {@link PipelineString} in multiple substrings, keeping track of the offsets of said substrings
-     * @param pipelineString
+     * @param {pipelineString} pipelineString
      * @throws {PreTokenizationError}
      *
      * It's possible for this method to throw other types of exceptions like ({@link InvalidProtocolBuffer}, {@link InvalidPointer}, etc).
@@ -52,7 +52,7 @@ export abstract class PreTokenizer extends ForeignInstance {
             throw new ObjectDisposed();
         }
         methodArgsNoResult(
-            dylib.pre_tokenize,
+            dylib.lib_tokenizers_pre_tokenize,
             this.instancePtr,
             PreTokenizeParams.create({
                 pipelineString: ForeignInstance.getInstancePtr(pipelineString),
@@ -61,7 +61,7 @@ export abstract class PreTokenizer extends ForeignInstance {
         );
     }
     protected override freFunc(): (instancePtr: bigint) => void {
-        return dylib.free_pre_tokenizer_wrapper;
+        return dylib.lib_tokenizers_free_pre_tokenizer_wrapper;
     }
 }
 

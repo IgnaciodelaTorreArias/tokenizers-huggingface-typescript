@@ -63,7 +63,7 @@ export class Tokenizer extends ForeignInstance {
      */
     static fromFile(path: string): Tokenizer {
         return new Tokenizer(createNewArgs(
-            dylib.tokenizer_from_file,
+            dylib.lib_tokenizers_tokenizer_from_file,
             TokenizerFromFile.create({ file: path }),
             TokenizerFromFile,
         ));
@@ -134,7 +134,7 @@ export class Tokenizer extends ForeignInstance {
             trainingParams.padding = padding;
         }
         return new Tokenizer(createNewArgs(
-            dylib.tokenizer_from_train,
+            dylib.lib_tokenizers_tokenizer_from_train,
             trainingParams,
             TokenizerFromTrain,
         ));
@@ -154,8 +154,9 @@ export class Tokenizer extends ForeignInstance {
         if (this.instancePtr === 0n) {
             throw new ObjectDisposed();
         }
+        // @ts-ignore: The native library ensures this will be set
         return methodArgsResult(
-            dylib.decode,
+            dylib.lib_tokenizers_decode,
             this.instancePtr,
             DecodeParams.create({
                 ids,
@@ -216,7 +217,7 @@ export class Tokenizer extends ForeignInstance {
             encodeParams.input2 = input2;
         }
         return methodArgsResult(
-            dylib.encode,
+            dylib.lib_tokenizers_encode,
             this.instancePtr,
             encodeParams,
             EncodeParams,
@@ -225,6 +226,6 @@ export class Tokenizer extends ForeignInstance {
     }
 
     protected override freFunc(): (instancePtr: bigint) => void {
-        return dylib.free_tokenizer;
+        return dylib.lib_tokenizers_free_tokenizer;
     }
 }

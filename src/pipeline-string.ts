@@ -10,16 +10,18 @@ import {
     SplitResult,
 } from "./generated/pipeline_string/pipeline_string.ts";
 import type { Offsets } from "./generated/tokenizer/encoding.ts";
-import type {
+import {
     OffsetReferential,
     OffsetType,
 } from "./generated/pipeline_string/pipeline_string_public.ts";
+
+export {OffsetReferential, OffsetType};
 
 export class PipelineString extends ForeignInstance {
     constructor(original: string) {
         super();
         this.instancePtr = createNewArgs(
-            dylib.new_pipeline_string,
+            dylib.lib_tokenizers_new_pipeline_string,
             PipelineStringParams.create({ content: original }),
             PipelineStringParams,
         );
@@ -30,7 +32,7 @@ export class PipelineString extends ForeignInstance {
         includeOffsets: boolean,
     ): [string, [number, number] | null][] {
         const r = methodArgsResult(
-            dylib.get_splits,
+            dylib.lib_tokenizers_get_splits,
             this.instancePtr,
             SplitParams.create({
                 offsetReferential,
@@ -45,7 +47,9 @@ export class PipelineString extends ForeignInstance {
             let offset: [number, number] | null = null;
             if (includeOffsets) {
                 offset = [
+                    // @ts-ignore: native library this will be set
                     (r.offsets[i] as Offsets).start,
+                    // @ts-ignore: native library this will be set
                     (r.offsets[i] as Offsets).end,
                 ];
             }
@@ -54,6 +58,6 @@ export class PipelineString extends ForeignInstance {
         return result;
     }
     protected override freFunc(): (instancePtr: bigint) => void {
-        return dylib.free_pipeline_string;
+        return dylib.lib_tokenizers_free_pipeline_string;
     }
 }

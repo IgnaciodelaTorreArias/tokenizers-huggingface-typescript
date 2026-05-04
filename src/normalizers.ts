@@ -32,7 +32,7 @@ export abstract class Normalizer extends ForeignInstance {
     constructor(param: NormalizerWrapper) {
         super();
         this.instancePtr = createNewArgs(
-            dylib.new_normalizer_wrapper,
+            dylib.lib_tokenizers_new_normalizer_wrapper,
             param,
             NormalizerWrapper,
         );
@@ -51,7 +51,7 @@ export abstract class Normalizer extends ForeignInstance {
             throw new ObjectDisposed();
         }
         methodArgsNoResult(
-            dylib.normalize,
+            dylib.lib_tokenizers_normalize,
             this.instancePtr,
             NormalizeParams.create({
                 pipelineString: ForeignInstance.getInstancePtr(pipelineString),
@@ -60,7 +60,7 @@ export abstract class Normalizer extends ForeignInstance {
         );
     }
     protected override freFunc(): (instancePtr: bigint) => void {
-        return dylib.free_normalizer_wrapper;
+        return dylib.lib_tokenizers_free_normalizer_wrapper;
     }
 }
 
@@ -285,3 +285,4 @@ export class ByteLevel extends Normalizer {
         super(NormalizerWrapper.create({ byteLevel: ByteL.create() }));
     }
 }
+
