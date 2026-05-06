@@ -14,7 +14,7 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
           ref: v${{ inputs.version }}
@@ -35,4 +35,4 @@ jobs:
       - name: build
         run: deno task generate
       - name: publish
-        run: deno publish --no-check
+        run: deno publish --no-check --allow-dirty
