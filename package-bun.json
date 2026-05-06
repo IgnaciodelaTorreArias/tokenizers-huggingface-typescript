@@ -21,7 +21,7 @@
     "url": "git+https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript.git"
   },
   "scripts": {
-    "generate": "bun run ./scripts/generate.ts"
+    "generate": "bun install && bun run ./scripts/generate.ts"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.6.3"
