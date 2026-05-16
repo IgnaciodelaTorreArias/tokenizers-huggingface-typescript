@@ -51,6 +51,14 @@ const dl = Deno.dlopen(
             parameters: ["u64", "buffer", "u64", "buffer", "buffer"],
             result: "i32",
         },
+        lib_tokenizers_set_encode_special_tokens: {
+            parameters: ["u64", "buffer", "u64", "buffer", "buffer"],
+            result: "i32",
+        },
+        lib_tokenizers_add_tokens: {
+            parameters: ["u64", "buffer", "u64", "buffer", "buffer"],
+            result: "i32",
+        },
         lib_tokenizers_free_tokenizer: { parameters: ["u64"], result: "void" },
     } as const
 );

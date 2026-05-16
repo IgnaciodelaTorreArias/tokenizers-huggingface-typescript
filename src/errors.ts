@@ -15,6 +15,7 @@ export class TokenizerSaveError extends Error {}
 export class TokenizerLoadFileError extends Error {}
 export class TokenizerEncodingError extends Error {}
 export class TokenizerDecodingError extends Error {}
+export class TokenizerAddedVocabError extends Error {}
 
 export function throwErrors(status: number, buf: Uint8Array): void {
     let details = "";
@@ -57,6 +58,8 @@ export function throwErrors(status: number, buf: Uint8Array): void {
             throw new TokenizerEncodingError(details);
         case e.CallStatus.TOKENIZER_DECODING_ERROR_DETAILS:
             throw new TokenizerDecodingError(details);
+        case e.CallStatus.TOKENIZER_ADDED_VOCAB_ERROR_DETAILS:
+            throw new TokenizerAddedVocabError(details);
     }
     if (status > 0) {
         throw new Error(

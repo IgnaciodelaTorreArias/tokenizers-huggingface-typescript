@@ -48,9 +48,6 @@ export abstract class PreTokenizer extends ForeignInstance {
      * This indicates an issue with the library, please open an issue at {@link https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript|Github}
      */
     preTokenize(pipelineString: PipelineString): void {
-        if (this.instancePtr === 0n) {
-            throw new ObjectDisposed();
-        }
         methodArgsNoResult(
             dylib.lib_tokenizers_pre_tokenize,
             this.instancePtr,

@@ -1,6 +1,6 @@
 {
     "name": "@lazy_engineer/tokenizers-huggingface-linux-arm64",
-    "version": "1.21.4-rc.1",
+    "version": "1.23.1",
     "license": "Apache-2.0",
     "type": "module",
     "description": "Precompiled dynamic library for HuggingFace tokenizers. This package includes only the native code. For full functionality, see https://jsr.io/@lazy-engineer/tokenizers-huggingface",

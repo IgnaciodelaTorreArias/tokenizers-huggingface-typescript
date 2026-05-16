@@ -20,14 +20,14 @@ if (isDeno) {
     let command: Deno.Command
     if (os == "windows" || os == "win32"){
         command = new Deno.Command("cmd", {
-            args: ["/c", "cd scripts && protoc --plugin=protoc-gen-ts_proto=generate.deno.cmd --ts_proto_out=../src/generated --ts_proto_opt=noDefaultsForOptionals=true,importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto"],
+            args: ["/c", "cd scripts && protoc --plugin=protoc-gen-ts_proto=generate.deno.cmd --ts_proto_out=../src/generated --ts_proto_opt=importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto"],
             stderr: "inherit",
             stdout: "inherit"
             
         })
     } else {
         command = new Deno.Command("sh", {
-            args: ["-c", "cd scripts && protoc --plugin=protoc-gen-ts_proto=./generate.deno.sh --ts_proto_out=../src/generated --ts_proto_opt=noDefaultsForOptionals=true,importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto"],
+            args: ["-c", "cd scripts && protoc --plugin=protoc-gen-ts_proto=./generate.deno.sh --ts_proto_out=../src/generated --ts_proto_opt=importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto"],
             stderr: "inherit",
             stdout: "inherit"
         })
@@ -40,8 +40,8 @@ if (isBun) {
     await fs.mkdir("./src/generated", {recursive: true})
     const mod = await import("bun")
     if (os == "windows" || os == "win32"){
-        await mod.$`cd scripts && protoc --plugin=protoc-gen-ts_proto=generate.bun.cmd --ts_proto_out=../src/generated --ts_proto_opt=noDefaultsForOptionals=true,importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto`;
+        await mod.$`cd scripts && protoc --plugin=protoc-gen-ts_proto=generate.bun.cmd --ts_proto_out=../src/generated --ts_proto_opt=importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto`;
     } else {
-        await mod.$`cd scripts && protoc --plugin=protoc-gen-ts_proto=./generate.bun.sh --ts_proto_out=../src/generated --ts_proto_opt=noDefaultsForOptionals=true,importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto`;
+        await mod.$`cd scripts && protoc --plugin=protoc-gen-ts_proto=./generate.bun.sh --ts_proto_out=../src/generated --ts_proto_opt=importSuffix=.ts --proto_path=../tokenizers_proto/protos ../tokenizers_proto/protos/lib.proto`;
     }
 }

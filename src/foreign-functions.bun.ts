@@ -62,6 +62,14 @@ const dl = dlopen(
             args: ["u64", "buffer", "u64", "buffer", "buffer"],
             returns: "i32",
         },
+        lib_tokenizers_set_encode_special_tokens: {
+            args: ["u64", "buffer", "u64", "buffer", "buffer"],
+            returns: "i32",
+        },
+        lib_tokenizers_add_tokens: {
+            args: ["u64", "buffer", "u64", "buffer", "buffer"],
+            returns: "i32",
+        },
         lib_tokenizers_free_tokenizer: {
             args: ["u64"],
             returns: "void",

@@ -3,7 +3,7 @@ import { Buffer } from "node:buffer";
 import { isDeno, isBun } from "./target.ts";
 import type * as callingTypes from "./foreign-functions-calling-types.ts";
 import type * as e from "./generated/error.ts";
-import { throwErrors } from "./errors.ts";
+import { ObjectDisposed, throwErrors } from "./errors.ts";
 
 export let dylib: {
     lib_tokenizers_free_buffer: callingTypes.FreeBuffer,
@@ -24,6 +24,8 @@ export let dylib: {
     lib_tokenizers_tokenizer_from_train: callingTypes.CreateNewArgsResultCallback,
     lib_tokenizers_encode: callingTypes.MethodArgsResultCallback,
     lib_tokenizers_decode: callingTypes.MethodArgsResultCallback,
+    lib_tokenizers_set_encode_special_tokens: callingTypes.MethodArgsResultCallback,
+    lib_tokenizers_add_tokens: callingTypes.MethodArgsResultCallback,
     lib_tokenizers_free_tokenizer: callingTypes.FreeInstance,
 };
 let toArrayBufferUnsafe: (ptr: bigint, len: bigint) => ArrayBuffer;
@@ -79,6 +81,9 @@ export function methodArgsResult<I, R>(
     inputParser: e.MessageFns<I>,
     resultParser: e.MessageFns<R>,
 ): R {
+    if (instancePtr === 0n) {
+        throw new ObjectDisposed();
+    }
     const buf = inputParser.encode(input).finish();
     const outPtr = new BigUint64Array(1);
     const outLen = new BigUint64Array(1);
@@ -103,6 +108,9 @@ export function methodArgsNoResult<I>(
     input: I,
     inputParser: e.MessageFns<I>,
 ): void {
+    if (instancePtr === 0n) {
+        throw new ObjectDisposed();
+    }
     const buf = inputParser.encode(input).finish();
     const outPtr = new BigUint64Array(1);
     const outLen = new BigUint64Array(1);

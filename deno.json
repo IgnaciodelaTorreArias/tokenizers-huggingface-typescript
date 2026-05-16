@@ -1,6 +1,6 @@
 {
   "name": "@lazy-engineer/tokenizers-huggingface",
-  "version": "0.21.4-rc.2",
+  "version": "0.23.1",
   "description": "Deno & Bun bindings for Hugging face's Tokenizers",
   "license": "Apache-2.0",
   "unstable": ["ffi"],
@@ -20,12 +20,12 @@
   },
   "imports": {
     "@bufbuild/protobuf": "npm:@bufbuild/protobuf@^2.6.3",
-    "@lazy_engineer/tokenizers-huggingface-darwin-arm64": "npm:@lazy_engineer/tokenizers-huggingface-darwin-arm64@1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-darwin-x64": "npm:@lazy_engineer/tokenizers-huggingface-darwin-x64@1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-linux-arm64": "npm:@lazy_engineer/tokenizers-huggingface-linux-arm64@1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-linux-x64": "npm:@lazy_engineer/tokenizers-huggingface-linux-x64@1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-win32-arm64": "npm:@lazy_engineer/tokenizers-huggingface-win32-arm64@1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-win32-x64": "npm:@lazy_engineer/tokenizers-huggingface-win32-x64@1.21.4-rc.1",
+    "@lazy_engineer/tokenizers-huggingface-darwin-arm64": "npm:@lazy_engineer/tokenizers-huggingface-darwin-arm64@1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-darwin-x64": "npm:@lazy_engineer/tokenizers-huggingface-darwin-x64@1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-linux-arm64": "npm:@lazy_engineer/tokenizers-huggingface-linux-arm64@1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-linux-x64": "npm:@lazy_engineer/tokenizers-huggingface-linux-x64@1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-win32-arm64": "npm:@lazy_engineer/tokenizers-huggingface-win32-arm64@1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-win32-x64": "npm:@lazy_engineer/tokenizers-huggingface-win32-x64@1.23.1",
     "ts-proto": "npm:ts-proto@^2.11.7",
     "@types/node": "npm:@types/node@^25.6.0",
     "@types/bun": "npm:@types/bun@^1.3.13"

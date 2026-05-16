@@ -15,9 +15,20 @@ import {
     OffsetType,
 } from "./generated/pipeline_string/pipeline_string_public.ts";
 
+import type { Normalizer } from "./normalizers.ts";
+import type { PreTokenizer } from "./pre-tokenizers.ts";
+
+
 export {OffsetReferential, OffsetType};
 
+/**
+ * A class used to represent the transformations applied to a string by: {@link Normalizer} and {@link PreTokenizer}
+ */
 export class PipelineString extends ForeignInstance {
+    /**
+     * @inheritdoc
+     * @param original The string you want to transform
+     */
     constructor(original: string) {
         super();
         this.instancePtr = createNewArgs(
@@ -26,6 +37,13 @@ export class PipelineString extends ForeignInstance {
             PipelineStringParams,
         );
     }
+    /**
+     * Use this method to see the current state of the string after transformations
+     * @param offsetReferential 
+     * @param offsetType 
+     * @param includeOffsets 
+     * @returns Splits of the original string
+     */
     getSplits(
         offsetReferential: OffsetReferential,
         offsetType: OffsetType,
@@ -47,9 +65,7 @@ export class PipelineString extends ForeignInstance {
             let offset: [number, number] | null = null;
             if (includeOffsets) {
                 offset = [
-                    // @ts-ignore: native library this will be set
                     (r.offsets[i] as Offsets).start,
-                    // @ts-ignore: native library this will be set
                     (r.offsets[i] as Offsets).end,
                 ];
             }

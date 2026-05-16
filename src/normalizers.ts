@@ -47,9 +47,6 @@ export abstract class Normalizer extends ForeignInstance {
      * This indicates an issue with the library, please open an issue at {@link https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript|Github}
      */
     normalize(pipelineString: PipelineString): void {
-        if (this.instancePtr === 0n) {
-            throw new ObjectDisposed();
-        }
         methodArgsNoResult(
             dylib.lib_tokenizers_normalize,
             this.instancePtr,

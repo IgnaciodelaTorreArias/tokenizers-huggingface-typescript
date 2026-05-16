@@ -1,6 +1,6 @@
 {
   "name": "@lazy-engineer/tokenizers-huggingface",
-  "version": "0.21.4-rc.2",
+  "version": "0.23.1",
   "description": "Deno & Bun bindings for Hugging face's Tokenizers",
   "keywords": ["tokenizer","huggingface","bindings"],
   "homepage": "https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript",
@@ -36,12 +36,12 @@
     "typescript": "^6"
   },
   "optionalDependencies": {
-    "@lazy_engineer/tokenizers-huggingface-darwin-arm64": "1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-darwin-x64": "1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-linux-arm64": "1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-linux-x64": "1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-win32-arm64": "1.21.4-rc.1",
-    "@lazy_engineer/tokenizers-huggingface-win32-x64": "1.21.4-rc.1"
+    "@lazy_engineer/tokenizers-huggingface-darwin-arm64": "1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-darwin-x64": "1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-linux-arm64": "1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-linux-x64": "1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-win32-arm64": "1.23.1",
+    "@lazy_engineer/tokenizers-huggingface-win32-x64": "1.23.1"
   },
   "os": ["darwin", "linux", "win32"],
   "cpu": ["x64", "arm64"],

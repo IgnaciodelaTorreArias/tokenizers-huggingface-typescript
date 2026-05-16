@@ -2,13 +2,16 @@ import {
     createNewArgs,
     dylib,
     ForeignInstance,
+    methodArgsNoResult,
     methodArgsResult,
 } from "./foreign-functions.ts";
 import {
+AddTokenParams,
     DecodeParams,
     DecodeResult,
     EncodeParams,
     EncodeResult,
+    SetEncodeSpecialTokensParams,
     TokenizerFromFile,
     TokenizerFromTrain,
 } from "./generated/tokenizer/tokenizer.ts";
@@ -24,6 +27,7 @@ import {
     TokenizerLoadFileError,
     TokenizerSaveError,
     TokenizerTrainingError,
+    TokenizerAddedVocabError
 } from "./errors.ts";
 
 import type { ModelWrapper } from "./generated/models/model.ts";
@@ -41,11 +45,48 @@ export {
     TruncationStrategy,
 } from "./generated/tokenizer/truncation.ts";
 import type { PaddingParams } from "./generated/tokenizer/padding.ts";
+import { AddedToken } from "./generated/trainers/added_token.ts";
 export {
     PaddingDirection,
     PaddingParams,
     PaddingStrategy,
 } from "./generated/tokenizer/padding.ts";
+
+interface TokenizerTrainOptions {
+    /** Takes care of pre-processing strings  */
+    normalizer?: Normalizer;
+    /** Pre-tokenizer that does the pre-segmentation step, splitting strings into substrings while tracking offsets */
+    preTokenizer?: PreTokenizer;
+    /** Post processors that add special tokens required by the language model */
+    processors?: PostProcessorWrapper[];
+    /** Decoders that convert raw tokens into readable form */
+    decoders?: DecoderWrapper[];
+    /** Truncation settings to shorten sequences exceeding max length */
+    truncation?: TruncationParams;
+    /** Padding settings for sequences shorter than max length */
+    padding?: PaddingParams;
+}
+
+interface EncodeIncludeOptions {
+    /** Whether to add special tokens (default: true) */
+    addSpecialTokens?: boolean;
+    /** Optional second input for dual sequences */
+    input2?: string;
+    /** Include type IDs in output (default: false) */
+    includeTypeIds?: boolean;
+    /** Include token strings in output (default: false) */
+    includeTokens?: boolean;
+    /** Include word indices in output (default: false) */
+    includeWords?: boolean;
+    /** Include character offsets in output (default: false) */
+    includeOffsets?: boolean;
+    /** Include special tokens mask in output (default: false) */
+    includeSpecialTokensMask?: boolean;
+    /** Include attention mask in output (default: false) */
+    includeAttentionMask?: boolean;
+    /** Include overflowing tokens in output (default: false) */
+    includeOverflowing?: boolean;
+}
 
 /**
  * A class to manage a Tokenizer
@@ -70,17 +111,13 @@ export class Tokenizer extends ForeignInstance {
     }
     /**
      * Trains a Tokenizer and saves it as a JSON file
+     *
      * @param files A list of paths to local files to use as training data
      * @param savePath The path in which the JSON file should be saved
      * @param model Trained algorithm that defines how text is split into tokens
      * @param trainer A trainer has the responsibility to train a model. We feed it with lines/sentences and then it can train the given Model
+     * @param options Training configuration options
      * @param pretty Whether the JSON file should be saved with a pretty more human readable format
-     * @param normalizer Takes care of pre-processing strings
-     * @param preTokenizer The pre tokenizer is in charge of doing the pre-segmentation step. It splits the given string in multiple substrings, keeping track of the offsets of said substrings
-     * @param processors A post processor has the responsibility to post process an encoded output of the Tokenizer. It adds any special tokens that a language model would require
-     * @param decoders A decoder changes the raw tokens into its more readable form
-     * @param truncation Truncation shortens input sequences that exceed a specified max length. This is crucial because most models have a fixed maximum input size
-     * @param padding If truncation takes care of cases when an input sequence exceeds a max length, padding takes care when the input sequence is shorter
      * @returns The trained tokenizer
      * @throws {InvalidArguments}
      * @throws {TokenizerBuildError}
@@ -96,42 +133,33 @@ export class Tokenizer extends ForeignInstance {
         savePath: string,
         model: ModelWrapper,
         trainer: TrainerWrapper,
+        options: TokenizerTrainOptions = {},
         pretty: boolean = false,
-        normalizer: Normalizer | null = null,
-        preTokenizer: PreTokenizer | null = null,
-        processors: PostProcessorWrapper[] | null = null,
-        decoders: DecoderWrapper[] | null = null,
-        truncation: TruncationParams | null = null,
-        padding: PaddingParams | null = null,
     ): Tokenizer {
         const trainingParams = TokenizerFromTrain.create({
             files,
             savePath,
             pretty,
+            model,
+            trainer,
+            truncation: options.truncation,
+            padding: options.padding,
         });
-        trainingParams.model = model;
-        trainingParams.trainer = trainer;
-        if (normalizer != null) {
-            trainingParams.normalizer = super.getInstancePtr(normalizer);
+        if (options.normalizer != undefined) {
+            trainingParams.normalizer = super.getInstancePtr(options.normalizer);
         }
-        if (preTokenizer != null) {
-            trainingParams.preTokenizer = super.getInstancePtr(preTokenizer);
+        if (options.preTokenizer != undefined) {
+            trainingParams.preTokenizer = super.getInstancePtr(options.preTokenizer);
         }
-        if (processors != null) {
+        if (options.processors != undefined) {
             trainingParams.processor = ProcessorWrapperParams.create({
-                params: processors,
+                params: options.processors,
             });
         }
-        if (decoders != null) {
+        if (options.decoders != undefined) {
             trainingParams.decoder = DecoderWrapperParams.create({
-                params: decoders,
+                params: options.decoders,
             });
-        }
-        if (truncation != null) {
-            trainingParams.truncation = truncation;
-        }
-        if (padding != null) {
-            trainingParams.padding = padding;
         }
         return new Tokenizer(createNewArgs(
             dylib.lib_tokenizers_tokenizer_from_train,
@@ -151,10 +179,6 @@ export class Tokenizer extends ForeignInstance {
      * This indicates an issue with the library, please open an issue at {@link https://github.com/IgnaciodelaTorreArias/tokenizers-huggingface-typescript|Github}
      */
     decode(ids: number[], skipSpecialTokens: boolean): string {
-        if (this.instancePtr === 0n) {
-            throw new ObjectDisposed();
-        }
-        // @ts-ignore: The native library ensures this will be set
         return methodArgsResult(
             dylib.lib_tokenizers_decode,
             this.instancePtr,
@@ -172,14 +196,8 @@ export class Tokenizer extends ForeignInstance {
      * When the parameters with the "include" prefix are false (default) this helps improve performance since unused data is not serialized/deserialized preventing over fetching
      * @param input The string to encode
      * @param addSpecialTokens Whether to add special tokens
-     * @param input2 An optional 2nd input for dual sequences
-     * @param includeTypeIds
-     * @param includeTokens
-     * @param includeWords
-     * @param includeOffsets
-     * @param includeSpecialTokensMask
-     * @param includeAttentionMask
-     * @param includeOverflowing
+     * @param encodeIncludeOptions Specify Which parts of the encoding you actually need, this helps improve performance since unused data is not serialized/deserialized preventing over fetching
+     * @param input2 Optional second input for dual sequences
      * @returns The Encodings with the contents as specified by the parameters
      * @throws {TokenizerEncodingError}
      *
@@ -190,32 +208,23 @@ export class Tokenizer extends ForeignInstance {
     encode(
         input: string,
         addSpecialTokens: boolean,
-        input2: string | null = null,
-        includeTypeIds: boolean = false,
-        includeTokens: boolean = false,
-        includeWords: boolean = false,
-        includeOffsets: boolean = false,
-        includeSpecialTokensMask: boolean = false,
-        includeAttentionMask: boolean = false,
-        includeOverflowing: boolean = false,
+        encodeIncludeOptions: EncodeIncludeOptions = {},
+        input2?: string,
+        charOffsets?: boolean,
     ): Encoding[] {
-        if (this.instancePtr === 0n) {
-            throw new ObjectDisposed();
-        }
         const encodeParams = EncodeParams.create({
             input,
             addSpecialTokens,
-            includeTypeIds,
-            includeTokens,
-            includeWords,
-            includeOffsets,
-            includeSpecialTokensMask,
-            includeAttentionMask,
-            includeOverflowing,
+            input2,
+            charOffsets,
+            includeTypeIds: encodeIncludeOptions.includeTypeIds,
+            includeTokens: encodeIncludeOptions.includeTokens,
+            includeWords: encodeIncludeOptions.includeWords,
+            includeOffsets: encodeIncludeOptions.includeOffsets,
+            includeSpecialTokensMask: encodeIncludeOptions.includeSpecialTokensMask,
+            includeAttentionMask: encodeIncludeOptions.includeAttentionMask,
+            includeOverflowing: encodeIncludeOptions.includeOverflowing,
         });
-        if (input2 != null) {
-            encodeParams.input2 = input2;
-        }
         return methodArgsResult(
             dylib.lib_tokenizers_encode,
             this.instancePtr,
@@ -223,6 +232,32 @@ export class Tokenizer extends ForeignInstance {
             EncodeParams,
             EncodeResult,
         ).encodings;
+    }
+    /**
+     * Set the added vocab’s splitting scheme
+     * @param value 
+     */
+    setEncodeSpecialTokens(value: boolean): void {
+        methodArgsNoResult(
+            dylib.lib_tokenizers_set_encode_special_tokens,
+            this.instancePtr,
+            SetEncodeSpecialTokensParams.create({value}),
+            SetEncodeSpecialTokensParams
+        );
+    }
+    /**
+     * Add the given tokens to the added vocabulary
+     * @param tokens Tokens to be added to the vocabulary
+     * @param special Whether the tokens should be added as special tokens
+     * @throws { TokenizerAddedVocabError }
+     */
+    addTokens(tokens: AddedToken[], special: boolean): void {
+        methodArgsNoResult(
+            dylib.lib_tokenizers_add_tokens,
+            this.instancePtr,
+            AddTokenParams.create({tokens, special}),
+            AddTokenParams
+        );
     }
 
     protected override freFunc(): (instancePtr: bigint) => void {
